@@ -3,7 +3,7 @@ var browserify = require('gulp-browserify');
 
 gulp.task('browserify', function() {
   return gulp.
-    src('./client/js/index.js').
+    src('./client/js/app.js').
     pipe(browserify()).
     pipe(gulp.dest('./public'));
 });

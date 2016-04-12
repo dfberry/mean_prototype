@@ -22,9 +22,10 @@ module.exports = function(config) {
             // For ngMockE2E
             'https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-mocks.js',
 
-            './public/index.js', // main release library for this project
-            //'test/fixtures/*.html*', currently not testing html DOM
-            './test/client.*.test.js' // location of test files
+            'public/app.js', // main release library for this project
+            'test/client.*.test.js', // location of test files
+            { pattern: 'public/templates/*.html', included: false, served: true }
+            
         ],
 
 
@@ -35,10 +36,31 @@ module.exports = function(config) {
 
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
-        
-        //--topmail is already browserified by the time I get it
-        //preprocessors: {
-        //    'public/js/*.js': [ 'browserify' ]
+
+        //ngHtml2JsPreprocessor: {
+            // strip this from the file path
+           // stripPrefix: 'aaa/',
+            //stripSuffix: '.abc',
+            // prepend this to the
+            //prependPrefix: 'zzz/',
+
+            // or define a custom transform function
+            // - cacheId returned is used to load template
+            //   module(cacheId) will return template at filepath
+            //cacheIdFromPath: function(filepath) {
+                // example strips 'public/' from anywhere in the path
+                // module(app/templates/template.html) => app/public/templates/template.html
+                //var cacheId = filepath.strip('public/', '');
+                //return cacheId;
+            //},
+
+            // - setting this option will create only a single module that contains templates
+            //   from all the files, so you can load them all with module('foo')
+            // - you may provide a function(htmlPath, originalPath) instead of a string
+            //   if you'd like to generate modules dynamically
+            //   htmlPath is a originalPath stripped and/or prepended
+            //   with all provided suffixes and prefixes
+            //moduleName: 'ng-tpl'
         //},
 
         //browserify: {
@@ -66,7 +88,7 @@ module.exports = function(config) {
 
 
         // enable / disable watching file and executing tests whenever any file changes
-        autoWatch: true,
+        //autoWatch: true,
 
 
         // start these browsers
@@ -83,10 +105,22 @@ module.exports = function(config) {
         ],
         // Continuous Integration mode
         // if true, Karma captures browsers, runs the tests and exits
-        singleRun: false,
+        singleRun: true,
 
         // Concurrency level
         // how many browser should be started simultanous
-        concurrency: Infinity
+        //concurrency: Infinity,
+
+
+        proxies: {
+            '/': 'http://localhost:9876/base/public'
+        },
+
+        client: {
+            captureConsole: true,
+            mocha: {
+                bail: true
+            }
+        }
     })
 }

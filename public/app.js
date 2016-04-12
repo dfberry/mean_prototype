@@ -54,7 +54,7 @@ exports.$myConfig = function($http) {
       get('/config/v1/json').
       success(function(data) {
           
-          console.log(JSON.stringify(data));
+        console.log("services.js = " + JSON.stringify(data));
           
         configData.data = data;
       }).
