@@ -1,7 +1,11 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 exports.UserMenuController = function($scope, $myConfig) {
     
-  $scope.config = $myConfig;
+  $scope.config = $myConfig;  
+    
+  //$scope.config = $myConfig;
+  
+  //console.log("usermenucontroller = " + JSON.stringify($scope.config));
   
   setTimeout(function() {
     $scope.$emit('UserMenuController');
@@ -21,7 +25,7 @@ var services = require('./services');
 var _ = require('underscore');
 
 // separate module 
-var components = angular.module('myApp.components', ['ng']);
+var components = angular.module('myApp', ['ng']);
 
 _.each(controllers, function(controller, name) {
   components.controller(name, controller);
@@ -36,33 +40,36 @@ _.each(services, function(factory, name) {
 });
 
 // separate module for routes
-var app = angular.module('myApp', ['myApp.components', 'ngRoute']);
+//var app = angular.module('myApp', ['myApp.components', 'ngRoute']);
 
 
 },{"./controllers":1,"./directives":2,"./services":4,"underscore":6}],4:[function(require,module,exports){
 var status = require('http-status');
 
 exports.$myConfig = function($http) {
-  var s = {};
+  var configData= {};
 
-  s.loadConfig = function() {
+  configData.loadConfig = function() {
     $http.
-      get('/api/v1/config').
+      get('/config/v1/json').
       success(function(data) {
-        s.config = data.config;
+          
+          console.log(JSON.stringify(data));
+          
+        configData.data = data;
       }).
       error(function(data, status) {
         if (status === status.UNAUTHORIZED) {
-          s.user = null;
+          configData.data = null;
         }
       });
   };
 
-  s.loadConfig();
+  configData.loadConfig();
 
-  setInterval(s.loadUser, 60 * 60 * 1000);
+  setInterval(configData.loadUser, 60 * 60 * 1000);
 
-  return s;
+  return configData;
 };
 
 },{"http-status":5}],5:[function(require,module,exports){

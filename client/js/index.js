@@ -4,7 +4,7 @@ var services = require('./services');
 var _ = require('underscore');
 
 // separate module 
-var components = angular.module('myApp.components', ['ng']);
+var components = angular.module('myApp', ['ng']);
 
 _.each(controllers, function(controller, name) {
   components.controller(name, controller);
@@ -19,5 +19,5 @@ _.each(services, function(factory, name) {
 });
 
 // separate module for routes
-var app = angular.module('myApp', ['myApp.components', 'ngRoute']);
+//var app = angular.module('myApp', ['myApp.components', 'ngRoute']);
 

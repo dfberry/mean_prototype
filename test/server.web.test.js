@@ -44,7 +44,7 @@ describe(__filename, function() {
         // nothing to send via querystring    
             
         // ACT
-        request.get("http://localhost:3001/config/v1/help")
+        request.get("http://localhost:3001/config/v1/json")
             .then(function(res){
                 expect(res.status).to.equal(200);
                 console.log(res.body);

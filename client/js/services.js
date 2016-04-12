@@ -1,24 +1,27 @@
 var status = require('http-status');
 
 exports.$myConfig = function($http) {
-  var s = {};
+  var configData= {};
 
-  s.loadConfig = function() {
+  configData.loadConfig = function() {
     $http.
-      get('/api/v1/config').
+      get('/config/v1/json').
       success(function(data) {
-        s.config = data.config;
+          
+          console.log(JSON.stringify(data));
+          
+        configData.data = data;
       }).
       error(function(data, status) {
         if (status === status.UNAUTHORIZED) {
-          s.user = null;
+          configData.data = null;
         }
       });
   };
 
-  s.loadConfig();
+  configData.loadConfig();
 
-  setInterval(s.loadUser, 60 * 60 * 1000);
+  setInterval(configData.loadUser, 60 * 60 * 1000);
 
-  return s;
+  return configData;
 };
