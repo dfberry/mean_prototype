@@ -38,5 +38,20 @@ describe(__filename, function() {
                 assert.ifError(error);
                 done(error);
             });
+    });    
+    it('returns config file', function(done){
+        this.timeout(50000);    
+        // nothing to send via querystring    
+            
+        // ACT
+        request.get("http://localhost:3001/config/v1/help")
+            .then(function(res){
+                expect(res.status).to.equal(200);
+                console.log(res.body);
+                done();
+            }, function(error){
+                assert.ifError(error);
+                done(error);
+            });
     });
 });
