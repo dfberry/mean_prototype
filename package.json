@@ -1,0 +1,29 @@
+{
+  "name": "repo_master_mean1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "start": "node --harmony-destructuring index.js",
+    "test": "mocha test/server.web.test.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.13.4",
+    "https": "^1.0.0",
+    "morgan": "^1.7.0",
+    "path": "^0.12.7",
+    "serve-favicon": "^2.3.0",
+    "wagner-core": "^0.2.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.4.5",
+    "superagent": "^1.8.3",
+    "superagent-bluebird-promise": "^3.0.0"
+  }
+}
