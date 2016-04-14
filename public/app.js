@@ -1,21 +1,51 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-exports.UserMenuController = function($scope, $myConfig) {
+exports.UserMenuController = function($scope, configService) {
     
-  $scope.config = $myConfig;  
+   console.log("controllers.js::UserMenuController, bottom of Function"); 
+
+  //console.log("controllers.js::UserMenuController, $myConfig=" + $myConfig);  
+  //console.log("controllers.js::UserMenuController, $myConfig=" + JSON.stringify($myConfig));    
+    
+  //console.log("before fn top");  
+  configService.loadConfig(function(data, err){
+    console.log("inside fn, data = " + JSON.stringify(data));
+    $scope.config = data;
+    console.log("inside fn, err = " + JSON.stringify(err));
+  });  
+  //console.log("before fn bottom");
     
   //$scope.config = $myConfig;
+  //setTimeout(function() {
+ //   $scope.$emit('UserMenuController');
+  //}, 0);
   
-  //console.log("usermenucontroller = " + JSON.stringify($scope.config));
+   //console.log("controllers.js::UserMenuController, bottom of Function"); 
   
+};
+exports.LoadImmediatelyController = function($scope, $myImmediateService) {
+  
+  console.log("LoadImmediatelyController top");
+  
+  $scope.data = $myImmediateService;
+
   setTimeout(function() {
-    $scope.$emit('UserMenuController');
+    $scope.$emit('LoadImmediatelyController');
   }, 0);
+  
+  console.log("LoadImmediatelyController bottom");
 };
 },{}],2:[function(require,module,exports){
 exports.userMenu = function() {
   return {
     controller: 'UserMenuController',
     templateUrl: '/templates/user_menu.html'
+  };
+};
+
+exports.now = function() {
+  return {
+    controller: 'LoadImmediatelyController',
+    templateUrl: '/templates/now.html'
   };
 };
 },{}],3:[function(require,module,exports){
@@ -36,6 +66,7 @@ _.each(directives, function(directive, name) {
 });
 
 _.each(services, function(factory, name) {
+  console.log("loading service named " + name);
   components.factory(name, factory);
 });
 
@@ -46,30 +77,58 @@ _.each(services, function(factory, name) {
 },{"./controllers":1,"./directives":2,"./services":4,"underscore":6}],4:[function(require,module,exports){
 var status = require('http-status');
 
-exports.$myConfig = function($http) {
-  var configData= {};
-
-  configData.loadConfig = function() {
+exports.configService = function($http) {
+  
+  var loadConfig = function(callback) {
+    
     $http.
       get('/config/v1/json').
       success(function(data) {
           
-        console.log("services.js = " + JSON.stringify(data));
+        console.log("services.js.$myConfig, data = " + JSON.stringify(data));
           
-        configData.data = data;
+        callback(data);
       }).
       error(function(data, status) {
         if (status === status.UNAUTHORIZED) {
-          configData.data = null;
+          callback( new Error("error"));
         }
       });
   };
+  return {
+    loadConfig: loadConfig
+  };
+};
 
-  configData.loadConfig();
+exports.$myImmediateService = function($http) {
+  var s = {};
 
-  setInterval(configData.loadUser, 60 * 60 * 1000);
+  s.loadUser = function() {
 
-  return configData;
+    console.log("myImmediateService called");
+
+    /*
+    $http.
+      get('/config/v1/json').
+      success(function(data) {
+        console.log("myImmediateService get returned");
+        s.user = data.user;
+      }).
+      error(function(data, $status) {
+        if ($status === status.UNAUTHORIZED) {
+          s.user = null;
+        }
+      });*/
+      s.data = 5;
+      
+  };
+
+  s.loadUser();
+
+  // 'redoes request every hour
+  setInterval(s.loadUser, 60 * 60 * 1000);
+
+  return s;
 };
 
 },{"http-status":5}],5:[function(require,module,exports){

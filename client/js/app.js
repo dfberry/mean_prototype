@@ -15,6 +15,7 @@ _.each(directives, function(directive, name) {
 });
 
 _.each(services, function(factory, name) {
+  console.log("loading service named " + name);
   components.factory(name, factory);
 });
 

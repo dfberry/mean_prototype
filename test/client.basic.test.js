@@ -26,11 +26,15 @@ describe('User menu', function() {
 
   it('shows logged config info', function(done) {
       
+    console.log("client.basic.test.js::it top of it test");   
+      
     httpBackend.expectGET('/config/v1/json').respond(configData);
 
     scope.$on('UserMenuController', function() {
       
-      console.log(element);  
+      var configText = element.find('.config').text();
+      
+      console.log("client.basic.test.js::it, configText= " + configText);  
         
       //assert.equal(element.find('.config').text().trim(), configData);
 

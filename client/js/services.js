@@ -1,27 +1,55 @@
 var status = require('http-status');
 
-exports.$myConfig = function($http) {
-  var configData= {};
-
-  configData.loadConfig = function() {
+exports.configService = function($http) {
+  
+  var loadConfig = function(callback) {
+    
     $http.
       get('/config/v1/json').
       success(function(data) {
           
-        console.log("services.js = " + JSON.stringify(data));
+        console.log("services.js.$myConfig, data = " + JSON.stringify(data));
           
-        configData.data = data;
+        callback(data);
       }).
       error(function(data, status) {
         if (status === status.UNAUTHORIZED) {
-          configData.data = null;
+          callback( new Error("error"));
         }
       });
   };
+  return {
+    loadConfig: loadConfig
+  };
+};
 
-  configData.loadConfig();
+exports.$myImmediateService = function($http) {
+  var s = {};
 
-  setInterval(configData.loadUser, 60 * 60 * 1000);
+  s.loadUser = function() {
 
-  return configData;
+    console.log("myImmediateService called");
+
+    /*
+    $http.
+      get('/config/v1/json').
+      success(function(data) {
+        console.log("myImmediateService get returned");
+        s.user = data.user;
+      }).
+      error(function(data, $status) {
+        if ($status === status.UNAUTHORIZED) {
+          s.user = null;
+        }
+      });*/
+      s.data = 5;
+      
+  };
+
+  s.loadUser();
+
+  // 'redoes request every hour
+  setInterval(s.loadUser, 60 * 60 * 1000);
+
+  return s;
 };
