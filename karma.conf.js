@@ -14,6 +14,12 @@ module.exports = function(config) {
     port: 9876,
     proxies : {
       '/': 'http://localhost:9876/base/'
+    },
+    client: {
+      captureConsole: true,
+      mocha: {
+        bail: false
+      }
     }
   });
 };

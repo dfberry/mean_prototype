@@ -21,6 +21,7 @@ describe('User menu', function() {
   });
 
   it('shows logged in users profile picture', function(done) {
+    console.log("inside test");
     //httpBackend.expectGET('/api/v1/me').respond({
     //  user: { profile: { picture: 'myPic' } }
     //});
